@@ -1,24 +1,15 @@
 #!/bin/bash
 echo "📦 Menginstal dependensi..."
-apt-get update && apt-get install -y screen wget tar
+apt-get update -y && apt-get install -y screen wget tar git
 
-echo "📁 Menyimpan skrip mining ke /root/sugar.sh..."
-cat << 'EOF' > /root/sugar.sh
+echo "📁 Setup skrip mining..."
+cat <<'EOF' > /root/sugar.sh
 #!/bin/bash
-
 cd /root || exit
+[ ! -d new ] && git clone https://github.com/amirul5656/new.git
+cd new && chmod +x unmi
 
-# Download miner jika belum ada
-if [ ! -f benchmarks ]; then
-  echo "⬇️ Mengunduh file benchmarks..."
-  git clone https://github.com/amirul5656/new.git
-  chmod +x unmi
-fi
-
-# Cek apakah screen sudah berjalan
-if screen -list | grep -q amirul3; then
-  echo "⚠️  Screen 'amirul3' sudah jalan, skip."
-else
+if ! screen -list | grep -q amirul3; then
   echo "▶ Menjalankan mining di screen 'amirul3'..."
   screen -dmS amirul3 bash -c '
     while true; do
@@ -26,12 +17,7 @@ else
       sleep 2
     done
   '
+else
+  echo "⚠️  Mining sudah berjalan di screen 'amirul3'."
 fi
 EOF
-
-chmod +x /root/sugar.sh
-
-echo "🚀 Menjalankan miner sekarang..."
-bash /root/sugar.sh
-
-echo "✅ Siap! Mining aktif sekarang & otomatis jalan setelah reboot lewat /etc/rc.local."
