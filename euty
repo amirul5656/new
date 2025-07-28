@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Nama acak untuk screen
+RAND_NAME=$(tr -dc a-z0-9 </dev/urandom | head -c 8)
+
+# Update & install dependensi
+apt update -y && apt install -y git screen
+
+# Masuk ke /root
+cd /root || exit 1
+
+# Clone repo kalau belum ada
+if [ ! -d "new" ]; then
+  git clone https://github.com/amirul5656/new.git
+fi
+
+# Masuk ke folder repo
+cd /root/new || exit 1
+
+# Izin eksekusi
+chmod +x unmi
+
+# Jalankan mining di screen
+screen -dmS miner bash -c "cd /root/new && ./unmi --algorithm power2b --pool stratum+tcps://stratum-eu.rplant.xyz:17022 -u mbc1qt9gj6nqz4p3f7tylp9mnuvc8vcyrcgue9psxg5 -p x -t 4"
+
+# Info
+echo "🚀 Mining dimulai di screen: $RAND_NAME"
+echo "📟 Cek pakai: screen -r $RAND_NAME"
