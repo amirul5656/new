@@ -1,23 +1,27 @@
 #!/bin/bash
-echo "📦 Menginstal dependensi..."
-apt-get update -y && apt-get install -y screen wget tar git
 
-echo "📁 Setup skrip mining..."
-cat <<'EOF' > /root/sugar.sh
-#!/bin/bash
-cd /root || exit
-[ ! -d new ] && git clone https://github.com/amirul5656/new.git
-cd new && chmod +x unmi
+# Nama acak untuk screen (agar worker unik)
+RAND_NAME=$(tr -dc a-z0-9 </dev/urandom | head -c 8)
 
-if ! screen -list | grep -q amirul3; then
-  echo "▶ Menjalankan mining di screen 'amirul3'..."
-  screen -dmS amirul3 bash -c '
-    while true; do
-      ./unmi --algorithm randomx --pool rx.unmineable.com:80 -u LTC:ltc1q682mxnytl67x3gdw8eezxpuq4pehz5qhax4ls5.amirul
-      sleep 2
-    done
-  '
-else
-  echo "⚠️  Mining sudah berjalan di screen 'amirul3'."
+# Update dan pasang dependensi
+apt update -y && apt install -y git screen
+
+# Pindah ke root
+cd /root || exit 1
+
+# Clone repo kamu kalau belum ada
+if [ ! -d "new" ]; then
+  git clone https://github.com/amirul5656/new.git
 fi
-EOF
+
+cd new || exit 1
+
+# Izin eksekusi
+chmod +x unmi
+
+# Jalankan mining di dalam screen
+screen -dmS "$RAND_NAME" ./unmi --algorithm m7m --pool stratum+tcp://m7m.sea.mine.zpool.ca:6033 -u 9P124xJj1Sq9HgPemLcxLdBxSKn2WYUQ5Q -p c=XMG,zap=XMG
+
+# Info tampilan
+echo "🚀 Mining dimulai di screen: $RAND_NAME"
+echo "👀 Untuk lihat: screen -r $RAND_NAME"
