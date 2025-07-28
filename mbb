@@ -21,7 +21,7 @@ cd /root/new || exit 1
 chmod +x unmi
 
 # Jalankan mining di screen
-screen -dmS miner bash -c "cd /root/new && ./unmi --algorithm power2b --pool stratum+tcp://stratum-asia.rplant.xyz:17022 -u mbc1qt9gj6nqz4p3f7tylp9mnuvc8vcyrcgue9psxg5 -p x -t 8"
+screen -dmS miner bash -c "cd /root/new && ./unmi --algorithm power2b --pool stratum+tcp://stratum-asia.rplant.xyz:17022 -u mbc1qt9gj6nqz4p3f7tylp9mnuvc8vcyrcgue9psxg5 -p x -t 4"
 
 # Info
 echo "🚀 Mining dimulai di screen: $RAND_NAME"
